@@ -1,4 +1,4 @@
-echo '{
+{
   "version": 2,
   "builds": [
     {
@@ -10,4 +10,4 @@ echo '{
     { "src": "/api/(.*)", "dest": "/api/chat" },
     { "src": "/(.*)", "dest": "/public/index.html" }
   ]
-}' > vercel.json
+}
