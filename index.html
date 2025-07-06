@@ -6,60 +6,65 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f4f4f4;
+      background: #1e1e2f;
+      color: #fff;
       padding: 2rem;
       max-width: 600px;
       margin: auto;
       text-align: center;
     }
-    h1 {
-      color: #333;
+    .dark-mode {
+      background: #fff;
+      color: #000;
     }
-    textarea {
-      width: 100%;
-      height: 100px;
-      font-size: 1rem;
+    textarea, select, button {
+      margin-top: 1rem;
       padding: 10px;
-      margin-top: 1rem;
-      box-sizing: border-box;
-    }
-    button {
-      margin-top: 1rem;
-      padding: 10px 20px;
       font-size: 1rem;
-      cursor: pointer;
+      width: 100%;
     }
     pre {
-      text-align: left;
-      background: #fff;
+      background: #2a2a3d;
       padding: 1rem;
-      margin-top: 1rem;
       border-radius: 5px;
       white-space: pre-wrap;
       word-wrap: break-word;
-      border: 1px solid #ccc;
+      margin-top: 1rem;
+      text-align: left;
     }
   </style>
 </head>
 <body>
   <h1>🤖 AI Agent Bot</h1>
-  <p>Ask me anything!</p>
+  <label for="model">Choose AI Model:</label>
+  <select id="model">
+    <option value="mistralai/mistral-7b-instruct">Mistral 7B</option>
+    <option value="huggingfaceh4/zephyr-7b-beta">Zephyr 7B</option>
+    <option value="meta-llama/llama-3-8b">Llama 3 8B</option>
+  </select>
 
-  <textarea id="prompt" placeholder="e.g. What is the capital of Kenya?"></textarea><br/>
-  <button onclick="ask()">Ask</button>
+  <textarea id="prompt" placeholder="Ask me anything..."></textarea>
+  <button onclick="ask()">Send</button>
+  <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
 
-  <pre id="response">Type a question and click "Ask".</pre>
+  <pre id="response">Type a question and click "Send".</pre>
 
   <script>
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark-mode");
+    }
+
     async function ask() {
       const input = document.getElementById('prompt').value;
       const output = document.getElementById('response');
+      const selectedModel = document.getElementById('model').value;
+
       output.textContent = "Thinking...";
 
-      const OPENROUTER_API_KEY = "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"; // Replace with your actual key
+      const OPENROUTER_API_KEY = "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"; // Replace with your key
 
       try {
-        const response = await fetch(" https://api.allorigins.win/get?url=" + encodeURIComponent(
+        const response = await fetch("https://api.allorigins.win/get?url=" + encodeURIComponent(
           " https://openrouter.ai/api/v1/chat/completions "
         ), {
           method: "POST",
@@ -68,7 +73,7 @@
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
-            model: "mistralai/mistral-7b-instruct",
+            model: selectedModel,
             messages: [{ role: "user", content: input }]
           })
         });
@@ -78,7 +83,7 @@
         }
 
         const data = await response.json();
-        const result = JSON.parse(data.contents); // allorigins returns raw response inside "contents"
+        const result = JSON.parse(data.contents); // allorigins wraps response in "contents"
 
         output.textContent = result.choices?.[0]?.message?.content || JSON.stringify(result, null, 2);
 
