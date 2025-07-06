@@ -2,36 +2,26 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>AI Chatbot</title>
   <link rel="stylesheet" href="style.css" />
 </head>
-<body>
+<body class="light">
   <div class="chat-container">
     <h1>🤖 AI Chatbot</h1>
 
-    <!-- Model Selector -->
     <label for="model-select">Choose AI Model:</label>
     <select id="model-select">
       <option value="mistralai/Mistral-7B-Instruct-v0.1">Mistral 7B</option>
       <option value="HuggingFaceH4/zephyr-7b-beta">Zephyr 7B</option>
-      <option value="meta-llama/Meta-Llama-3-8B-Instruct">Llama 3 8B</option>
     </select>
 
-    <!-- Chat Box -->
     <div id="chat-box"></div>
-
-    <!-- Input -->
     <input type="text" id="user-input" placeholder="Ask me anything..." />
-
-    <!-- Buttons -->
     <div style="margin-top: 10px;">
       <button onclick="sendMessage()">Send</button>
       <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
     </div>
   </div>
-
-  <!-- Script -->
   <script src="script.js"></script>
 </body>
 </html>
