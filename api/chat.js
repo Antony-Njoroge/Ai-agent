@@ -20,14 +20,16 @@ module.exports = async (req, res) => {
     });
 
     if (!hfRes.ok) {
+      console.error("HF API Error:", await hfRes.text());
       return res.status(500).json({ reply: "Error from Hugging Face API." });
     }
 
     const data = await hfRes.json();
     const reply = data.generated_text || "No response.";
     return res.status(200).json({ reply });
+
   } catch (error) {
-    console.error("Server error:", error);
+    console.error("Server error:", error.message);
     return res.status(500).json({ reply: "Internal server error." });
   }
 };
