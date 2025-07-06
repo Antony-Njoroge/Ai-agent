@@ -1,36 +1,27 @@
-const fetch = require('node-fetch');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AI Chatbot</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="light">
+  <div class="chat-container">
+    <h1>🤖 AI Chatbot</h1>
 
-module.exports = async (req, res) => {
-  const { prompt, model } = req.body;
+    <label for="model-select">Choose AI Model:</label>
+    <select id="model-select">
+      <option value="mistralai/Mistral-7B-Instruct-v0.1">Mistral 7B</option>
+      <option value="HuggingFaceH4/zephyr-7b-beta">Zephyr 7B</option>
+    </select>
 
-  if (!prompt || !model) {
-    return res.status(400).json({ reply: "Missing prompt or model." });
-  }
-
-  try {
-    const hfRes = await fetch(`https://api-inference.huggingface.co/models/ ${model}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        inputs: prompt,
-        parameters: { max_new_tokens: 200, temperature: 0.7 }
-      })
-    });
-
-    if (!hfRes.ok) {
-      const errText = await hfRes.text();
-      console.error("HF Error:", errText);
-      return res.status(500).json({ reply: "Error from Hugging Face API." });
-    }
-
-    const data = await hfRes.json();
-    const reply = data.generated_text || "No response from AI.";
-
-    return res.status(200).json({ reply });
-  } catch (error) {
-    console.error("Server error:", error);
-    return res.status(500).json({ reply: "Internal server error." });
-  }
-};
+    <div id="chat-box"></div>
+    <input type="text" id="user-input" placeholder="Ask me anything..." />
+    <div style="margin-top: 10px;">
+      <button onclick="sendMessage()">Send</button>
+      <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
